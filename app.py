@@ -2,19 +2,15 @@ import sqlite3
 
 # Connect to the existing database
 conn = sqlite3.connect('nyondo_stock.db')
-
-# Take user input
+#securing security
 name = input("Enter product name: ")
+query = "SELECT * FROM products WHERE name = ?"
+##the way i excute here changes too
+rows = conn.execute(query, (name,)).fetchall()
 
-# ❌ Vulnerable query (SQL injection possible)
-query = "SELECT * FROM products WHERE name = '" + name + "'"
-
-# Execute query
-rows = conn.execute(query).fetchall()
-
-# Display results
 for row in rows:
     print(row)
 
+conn.close()
 # Close connectionsc
 conn.close()
