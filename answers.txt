@@ -1,3 +1,23 @@
-name:
+name:Zziwa Eve Kobudingye
 student id:
-date:
+date:23/04/20
+i got the gode in our assignment document i copied it and pasted then ran  the code.
+a database of nyondo_stock.db was created and my first task was completed 
+My pc gives me hard time to screen shot but i am going to attach a link with pictures i took using my phone.
+I created a git repository that i named nyondo_sql_db,
+ initiated my work n pushed it to the repository.
+
+I then created  a vulnerable app where i imported my sqlite3 and connected to nyondo_stock.db
+i then selected using a select command that  alowwed joined strings 
+query = "SELECT * FROM products WHERE name ="" + "" ?
+so here i injected into the database on runing the code and entering the name as or='1'+1
+the entire database information was given to me.
+i then committed my work
+
+ I then  had to secure the security of the database with a right select from command
+ query = "SELECT * FROM products WHERE name = ?"
+ and with this when i ran the code and input the 0r = '1'+'1"
+ no results were displayed and that helped me confirm that my security was fixed
+ i the n committed with a message.
+
+ 
