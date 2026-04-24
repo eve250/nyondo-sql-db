@@ -1,20 +1,170 @@
 name:Zziwa Eve Kobudingye
 student id:
 date:23/04/20
+TASK1
 i got the gode in our assignment document i copied it and pasted then ran  the code.
 a database of nyondo_stock.db was created and my first task was completed 
 My pc gives me hard time to screen shot but i am going to attach a link with pictures i took using my phone.
 I created a git repository that i named nyondo_sql_db,
  initiated my work n pushed it to the repository.
 
-I then created  a vulnerable app where i imported my sqlite3 and connected to nyondo_stock.db
-i then selected using a select command that  alowwed joined strings 
-query = "SELECT * FROM products WHERE name ="" + "" ?
-so here i injected into the database on runing the code and entering the name as or='1'+1
-the entire database information was given to me.
-i then committed my work
+ Here is my setup.py
+import sqlite3
 
- I then  had to secure the security of the database with a right select from command
+conn = sqlite3.connect('nyondo_stock.db')
+
+conn.execute('''
+CREATE TABLE IF NOT EXISTS products (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT NOT NULL,
+description TEXT,
+price REAL NOT NULL
+)
+''')
+
+conn.executemany(
+'INSERT INTO products (name, description, price) VALUES (?, ?, ?)',
+[
+('Cement (bag)', 'Portland cement 50kg bag', 35000),
+('Iron Sheet 3m', 'Gauge 30 roofing sheet 3m long', 110000),
+('Paint 5L', 'Exterior wall paint white 5L', 60000),
+('Nails 1kg', 'Common wire nails 1kg pack', 12000),
+('Timber 2x4', 'Pine timber plank 2x4 per metre', 25000),
+]
+)
+
+conn.commit()
+
+rows = conn.execute('SELECT * FROM products').fetchall()
+for r in rows:
+  print(r)
+
+TASK 2
+i then created a  queries.py used select and insert commands to view and add as instructed
+import sqlite3
+conn = sqlite3.connect('nyondo_stock.db')
+cursor = conn.cursor()
+
+# Query A
+print("Query A")
+rows = cursor.execute("SELECT * FROM products").fetchall()
+for row in rows:
+print(row)
+print()
+
+# Query B
+print("Query B")
+rows = cursor.execute("SELECT name, price FROM products").fetchall()
+for row in rows:
+print(row)
+print()
+
+# Query C
+print("Query C")
+rows = cursor.execute("SELECT * FROM products WHERE id = 3").fetchall()
+for row in rows:
+print(row)
+print()
+
+# Query D
+print("Query D")
+rows = cursor.execute("SELECT * FROM products WHERE name LIKE '%sheet%'").fetchall()
+for row in rows:
+print(row)
+print()
+
+# Query E
+print("Query E")
+rows = cursor.execute("SELECT * FROM products ORDER BY price DESC").fetchall()
+for row in rows:
+print(row)
+print()
+
+# Query F
+print("Query F")
+rows = cursor.execute("SELECT * FROM products ORDER BY price DESC LIMIT 2").fetchall()
+for row in rows:
+print(row)
+print()
+
+# Query G
+print("Query G")
+cursor.execute("UPDATE products SET price = 38000 WHERE id = 1")
+conn.commit()
+
+rows = cursor.execute("SELECT * FROM products WHERE id = 1").fetchall()
+for row in rows:
+print(row)
+print()
+
+TASK 3
+# setup.py
+import sqlite3
+conn = sqlite3.connect('nyondo_stock.db')
+conn.execute('''
+CREATE TABLE IF NOT EXISTS products (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT NOT NULL,
+description TEXT,
+price REAL NOT NULL
+)
+''')
+conn.executemany(
+'INSERT INTO products (name, description, price) VALUES (?, ?, ?)',
+[
+('Cement (bag)', 'Portland cement 50kg bag', 35000),
+('Iron Sheet 3m','Gauge 30 roofing sheet 3m long', 110000),
+('Paint 5L', 'Exterior wall paint white 5L', 60000),
+
+('Nails 1kg', 'Common wire nails 1kg pack', 12000),
+('Timber 2x4', 'Pine timber plank 2x4 per metre', 25000),
+]
+)
+conn.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT  UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'attendant'
+)
+''')
+
+conn.executemany(
+    'INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
+    [
+        ('admin', 'admin123', 'admin'),
+        ('fatuma', 'pass456', 'attendant'),
+        ('wasswa', 'pass789', 'manager'),
+    ]
+)
+conn.commit()
+rows = conn.execute('SELECT * FROM products').fetchall()
+for r in rows: print(r)
+
+conn.commit()
+rows = conn.execute('SELECT * FROM users').fetchall()
+for r in rows: print(r)
+
+
+why they worked
+print("attack_1")
+search_product("' OR 1=1--")
+because our function for selecting products has no placeholders but uses f strings the hacker uses or 1=1 because its true he is able to acess data from our database
+
+print("attack  2")
+login("admin'--", "anything")
+because we have a faulty fuction for the admin has no placeholders but uses f string the hacker can get all admin information by leaving the two datches behind
+
+print("attack3")
+login("' OR '1'='1", "' OR '1'='1")
+this because  or 1=1 is always true so the with our faulty function for the login function has no placeholders but uses f string the intruder is able to access information without the right log n crudentials
+
+print("attack4")
+search_product("' UNION SELECT id, username, password, role FROM users--")
+this worked because we have a vulnerable function no placeholders but uses f string so when the hacker uses quotes inthe beginning they are able toacess all information
+
+task4
+ I then   had to secure the security of the database with a right select from command
  query = "SELECT * FROM products WHERE name = ?"
  and with this when i ran the code and input the 0r = '1'+'1"
  no results were displayed and that helped me confirm that my security was fixed
